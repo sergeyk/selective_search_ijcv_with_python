@@ -2,6 +2,7 @@ import tempfile
 import subprocess
 import shlex
 import os
+import numpy as np
 import scipy.io
 
 script_dirname = os.path.abspath(os.path.dirname(__file__))
@@ -32,12 +33,16 @@ def get_windows(image_fnames):
     if retcode != 0:
         raise Exception("Matlab script did not exit successfully!")
 
-    # Read the results, remove temporary file, and return.
-    boxes = list(scipy.io.loadmat(output_filename)['all_boxes'][0])
+    # Read the results and undo Matlab's 1-based indexing.
+    all_boxes = list(scipy.io.loadmat(output_filename)['all_boxes'][0])
+    subtractor = np.array((1, 1, 0, 0))[np.newaxis, :]
+    all_boxes = [boxes - subtractor for boxes in all_boxes]
+
+    # Remove temporary file, and return.
     os.remove(output_filename)
-    if len(boxes) != len(image_fnames):
+    if len(all_boxes) != len(image_fnames):
         raise Exception("Something went wrong computing the windows!")
-    return boxes
+    return all_boxes
 
 if __name__ == '__main__':
     """
@@ -51,5 +56,6 @@ if __name__ == '__main__':
     ] * 4
     t = time.time()
     boxes = get_windows(image_filenames)
+    print(boxes[:2])
     print("Processed {} images in {:.3f} s".format(
         len(image_filenames), time.time() - t))
