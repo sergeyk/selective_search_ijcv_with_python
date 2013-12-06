@@ -4,5 +4,7 @@ I simply needed a way to call this stuff from Python: `selective_search.py` and 
     import selective_search_ijcv_with_python as selective_search
     windows = selective_search.get_windows(image_filenames)
 
+To make sure this works, simply `python selective_search.py`.
+
 Sergey Karayev
 25 Nov 2013
