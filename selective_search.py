@@ -21,6 +21,7 @@ def get_windows(image_fnames):
     # Form the MATLAB script command that processes images and write to
     # temporary results file.
     f, output_filename = tempfile.mkstemp(suffix='.mat')
+    os.close(f)
     fnames_cell = '{' + ','.join("'{}'".format(x) for x in image_fnames) + '}'
     command = "selective_search({}, '{}')".format(fnames_cell, output_filename)
     print(command)
