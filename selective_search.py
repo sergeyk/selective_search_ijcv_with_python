@@ -8,7 +8,7 @@ import scipy.io
 script_dirname = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_windows(image_fnames):
+def get_windows(image_fnames, cmd='selective_search'):
     """
     Run MATLAB Selective Search code on the given image filenames to
     generate window proposals.
@@ -17,13 +17,17 @@ def get_windows(image_fnames):
     ----------
     image_filenames: strings
         Paths to images to run on.
+    cmd: string
+        selective search function to call:
+            - 'selective_search' for a few quick proposals
+            - 'selective_seach_rcnn' for R-CNN configuration for more coverage.
     """
     # Form the MATLAB script command that processes images and write to
     # temporary results file.
     f, output_filename = tempfile.mkstemp(suffix='.mat')
     os.close(f)
     fnames_cell = '{' + ','.join("'{}'".format(x) for x in image_fnames) + '}'
-    command = "selective_search({}, '{}')".format(fnames_cell, output_filename)
+    command = "{}({}, '{}')".format(cmd, fnames_cell, output_filename)
     print(command)
 
     # Execute command in MATLAB.
