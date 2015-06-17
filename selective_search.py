@@ -20,7 +20,7 @@ def get_windows(image_fnames, cmd='selective_search'):
     cmd: string
         selective search function to call:
             - 'selective_search' for a few quick proposals
-            - 'selective_seach_rcnn' for R-CNN configuration for more coverage.
+            - 'selective_search_rcnn' for R-CNN configuration for more coverage.
     """
     # Form the MATLAB script command that processes images and write to
     # temporary results file.
