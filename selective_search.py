@@ -33,7 +33,7 @@ def get_windows(image_fnames, cmd='selective_search'):
     # Execute command in MATLAB.
     mc = "matlab -nojvm -r \"try; {}; catch; exit; end; exit\"".format(command)
     pid = subprocess.Popen(
-        shlex.split(mc), stdout=open('/dev/null', 'w'), cwd=script_dirname)
+        shlex.split(mc), stdin=subprocess.PIPE, stdout=open('/dev/null', 'w'), cwd=script_dirname)
     retcode = pid.wait()
     if retcode != 0:
         raise Exception("Matlab script did not exit successfully!")
